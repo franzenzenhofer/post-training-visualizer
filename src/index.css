@@ -2,19 +2,31 @@
 
 @theme {
   --font-mono: 'JetBrains Mono', monospace;
-  --font-sans: 'Inter', sans-serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --color-wiki-bg: #ffffff;
+  --color-wiki-text: #202122;
+  --color-wiki-link: #3366cc;
+  --color-wiki-border: #a2a9b1;
+  --color-wiki-light: #f8f9fa;
+  --color-wiki-muted: #54595d;
+}
+
+* {
+  color-scheme: light;
 }
 
 body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   margin: 0;
+  background: var(--color-wiki-bg);
+  color: var(--color-wiki-text);
 }
 
 @keyframes token-appear {
   from {
     opacity: 0;
-    transform: translateY(4px);
+    transform: translateY(2px);
   }
   to {
     opacity: 1;
@@ -23,7 +35,7 @@ body {
 }
 
 .token-animate {
-  animation: token-appear 0.15s ease-out forwards;
+  animation: token-appear 0.2s ease-out forwards;
 }
 
 @keyframes cursor-blink {

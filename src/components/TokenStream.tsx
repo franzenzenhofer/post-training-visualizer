@@ -1,14 +1,16 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const TOKEN_COLORS = [
-  '#818cf8', '#34d399', '#fbbf24', '#f87171',
-  '#a78bfa', '#2dd4bf', '#fb923c', '#f472b6',
-  '#60a5fa', '#4ade80', '#facc15', '#e879f9',
+  '#3366cc', '#14866d', '#b32424', '#7c3aed',
+  '#0d9488', '#d97706', '#db2777', '#2563eb',
+  '#16a34a', '#ca8a04', '#c026d3', '#ea580c',
 ]
 
 function hashColor(token: string, index: number): string {
   return TOKEN_COLORS[(index + token.charCodeAt(0)) % TOKEN_COLORS.length]
 }
+
+const TOKEN_DELAY_MS = 300
 
 interface TokenStreamProps {
   tokens: string[]
@@ -17,32 +19,55 @@ interface TokenStreamProps {
 
 export function TokenStream({ tokens, isStreaming }: TokenStreamProps) {
   const containerRef = useRef<HTMLDivElement>(null)
+  const [visibleCount, setVisibleCount] = useState(0)
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  useEffect(() => {
+    if (tokens.length === 0) {
+      setVisibleCount(0)
+      return
+    }
+    if (visibleCount >= tokens.length && !isStreaming) return
+
+    timerRef.current = setInterval(() => {
+      setVisibleCount((prev) => {
+        if (prev >= tokens.length) {
+          if (timerRef.current) clearInterval(timerRef.current)
+          return prev
+        }
+        return prev + 1
+      })
+    }, TOKEN_DELAY_MS)
+
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current)
+    }
+  }, [tokens.length, isStreaming, visibleCount])
 
   useEffect(() => {
     if (containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight
     }
-  }, [tokens])
+  }, [visibleCount])
+
+  const showCursor = isStreaming || visibleCount < tokens.length
 
   return (
     <div
       ref={containerRef}
-      className="min-h-[60px] max-h-[120px] overflow-y-auto font-mono text-base leading-relaxed"
+      className="min-h-[60px] max-h-[180px] overflow-y-auto font-mono text-[15px] leading-relaxed"
     >
-      {tokens.map((token, i) => (
+      {tokens.slice(0, visibleCount).map((token, i) => (
         <span
           key={i}
           className="token-animate inline"
-          style={{
-            color: hashColor(token, i),
-            animationDelay: `${i * 0.02}s`,
-          }}
+          style={{ color: hashColor(token, i) }}
         >
           {token}
         </span>
       ))}
-      {isStreaming && (
-        <span className="cursor-blink ml-0.5 text-white">|</span>
+      {showCursor && (
+        <span className="cursor-blink ml-0.5 text-[#3366cc]">|</span>
       )}
     </div>
   )

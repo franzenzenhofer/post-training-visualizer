@@ -17,6 +17,7 @@ export function DemoCard({ demo, lang }: DemoCardProps) {
 
   const title = lang === 'de' ? demo.titleDE : demo.titleEN
   const desc = lang === 'de' ? demo.descDE : demo.descEN
+  const isBaseModel = demo.id.startsWith('base')
 
   const handleGenerate = useCallback(() => {
     abortRef.current?.abort()
@@ -46,68 +47,53 @@ export function DemoCard({ demo, lang }: DemoCardProps) {
     setIsStreaming(false)
   }, [])
 
-  const isBaseModel = demo.id.startsWith('base')
+  const borderColor = isBaseModel ? '#d33' : '#14866d'
+  const badgeBg = isBaseModel ? '#fee7e6' : '#d5fdf4'
+  const badgeColor = isBaseModel ? '#d33' : '#14866d'
 
   return (
     <div
-      className={`rounded-xl border p-6 transition-all ${
-        isBaseModel
-          ? 'border-red-500/30 bg-red-950/10'
-          : 'border-emerald-500/30 bg-emerald-950/10'
-      }`}
+      className="rounded bg-[#f8f9fa] border-l-4 p-5"
+      style={{ borderLeftColor: borderColor }}
     >
-      <div className="mb-1 flex items-center gap-3">
-        <span
-          className={`rounded-full px-3 py-1 text-xs font-semibold ${
-            isBaseModel
-              ? 'bg-red-500/20 text-red-400'
-              : 'bg-emerald-500/20 text-emerald-400'
-          }`}
-        >
-          {isBaseModel
-            ? lang === 'de'
-              ? 'Plappert'
-              : 'Babbles'
-            : lang === 'de'
-              ? 'Antwortet korrekt'
-              : 'Answers correctly'}
-        </span>
-      </div>
+      <span
+        className="inline-block rounded px-2 py-0.5 text-xs font-bold"
+        style={{ background: badgeBg, color: badgeColor }}
+      >
+        {isBaseModel
+          ? lang === 'de' ? 'Plappert' : 'Babbles'
+          : lang === 'de' ? 'Antwortet korrekt' : 'Answers correctly'}
+      </span>
 
-      <h3 className="mb-2 text-xl font-bold text-zinc-100">{title}</h3>
-      <p className="mb-4 text-sm leading-relaxed text-zinc-400">{desc}</p>
+      <h3 className="mt-2 mb-1 text-lg font-bold text-[#202122]">{title}</h3>
+      <p className="mb-3 text-[14px] leading-relaxed text-[#54595d]">{desc}</p>
 
       <PromptDisplay
         text={demo.displayPrompt}
         label={lang === 'de' ? 'Prompt an das Modell' : 'Prompt sent to model'}
       />
 
-      <div className="mt-4 flex items-center gap-3">
+      <div className="mt-3 flex items-center gap-3">
         <button
           onClick={isStreaming ? handleStop : handleGenerate}
-          disabled={false}
-          className={`rounded-lg px-5 py-2.5 text-sm font-semibold transition-all ${
+          className={`rounded px-4 py-2 text-sm font-bold transition-all ${
             isStreaming
-              ? 'bg-zinc-700 text-zinc-300 hover:bg-zinc-600'
-              : 'bg-indigo-600 text-white hover:bg-indigo-500'
+              ? 'border border-[#a2a9b1] bg-[#f8f9fa] text-[#202122] hover:bg-[#eaecf0]'
+              : 'border border-[#3366cc] bg-[#3366cc] text-white hover:bg-[#2a4b8d]'
           }`}
         >
           {isStreaming
-            ? lang === 'de'
-              ? 'Stopp'
-              : 'Stop'
-            : lang === 'de'
-              ? 'Generieren'
-              : 'Generate'}
+            ? lang === 'de' ? 'Stopp' : 'Stop'
+            : lang === 'de' ? 'Generieren' : 'Generate'}
         </button>
-        <span className="font-mono text-xs text-zinc-600">
+        <span className="font-mono text-xs text-[#72777d]">
           Llama 3.1 405B BASE
         </span>
       </div>
 
       {(tokens.length > 0 || isStreaming) && (
-        <div className="mt-4 rounded-lg border border-zinc-700/50 bg-zinc-950 p-4">
-          <div className="mb-2 text-xs font-medium uppercase tracking-wider text-zinc-500">
+        <div className="mt-3 rounded border border-[#a2a9b1] bg-white p-4">
+          <div className="mb-2 text-xs font-bold uppercase tracking-wider text-[#72777d]">
             {lang === 'de' ? 'Modell-Ausgabe' : 'Model output'} ({tokens.length}{' '}
             tokens)
           </div>
@@ -116,7 +102,7 @@ export function DemoCard({ demo, lang }: DemoCardProps) {
       )}
 
       {error && (
-        <div className="mt-3 rounded-lg border border-red-500/30 bg-red-950/30 p-3 text-sm text-red-400">
+        <div className="mt-3 rounded border border-[#d33] bg-[#fee7e6] p-3 text-sm text-[#d33]">
           {error}
         </div>
       )}

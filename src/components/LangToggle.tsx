@@ -7,7 +7,7 @@ export function LangToggle({ lang, onToggle }: LangToggleProps) {
   return (
     <button
       onClick={onToggle}
-      className="rounded-lg border border-zinc-700 px-3 py-1.5 text-sm font-medium text-zinc-400 transition-all hover:border-zinc-500 hover:text-zinc-200"
+      className="rounded border border-[#a2a9b1] px-3 py-1 text-sm font-bold text-[#3366cc] hover:bg-[#eaecf0]"
     >
       {lang === 'en' ? 'DE' : 'EN'}
     </button>

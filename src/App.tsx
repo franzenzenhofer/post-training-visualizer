@@ -1,17 +1,36 @@
-import { useCallback, useState } from 'react'
-import { DEMOS } from './prompts'
-import { getApiKey } from './api'
-import { DemoCard } from './components/DemoCard'
-import { ApiKeyInput } from './components/ApiKeyInput'
+import { useCallback, useEffect, useState } from 'react'
+import { SLIDES_EN, SLIDES_DE } from './prompts'
 import { LangToggle } from './components/LangToggle'
+import { Slide } from './components/Slide'
 
 function App() {
   const [lang, setLang] = useState<'en' | 'de'>('en')
-  const [hasKey, setHasKey] = useState(!!getApiKey())
+  const [slideIndex, setSlideIndex] = useState(0)
+  const [started, setStarted] = useState(false)
+
+  const slides = lang === 'en' ? SLIDES_EN : SLIDES_DE
 
   const toggleLang = useCallback(() => {
     setLang((prev) => (prev === 'en' ? 'de' : 'en'))
+    setSlideIndex(0)
   }, [])
+
+  const goNext = useCallback(() => {
+    setSlideIndex((i) => Math.min(i + 1, slides.length - 1))
+  }, [slides.length])
+
+  const goPrev = useCallback(() => {
+    setSlideIndex((i) => Math.max(i - 1, 0))
+  }, [])
+
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight') goNext()
+      if (e.key === 'ArrowLeft') goPrev()
+    }
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  }, [goNext, goPrev])
 
   const t = {
     title:
@@ -20,70 +39,56 @@ function App() {
         : 'How Post-Training Works',
     subtitle:
       lang === 'de'
-        ? 'Ein Basismodell sagt nur das naechste Wort voraus. Post-Training bringt ihm bei, Fragen zu beantworten.'
-        : 'A base model just predicts the next word. Post-training teaches it to answer questions.',
-    insight:
-      lang === 'de'
-        ? 'Post-Training = diese Muster in die Modellgewichte einbrennen, sodass man die Beispiele nicht jedes Mal im Prompt braucht.'
-        : 'Post-training = baking these patterns INTO the model weights, so you do not need the examples in the prompt every time.',
-    apiKey: lang === 'de' ? 'Hyperbolic API Key' : 'Hyperbolic API Key',
+        ? 'Ein Basismodell sagt nur das naechste Wort voraus. Post-Training bringt ihm bei, Fragen zu beantworten. Alle Prompts sind editierbar — experimentiere selbst!'
+        : 'A base model just predicts the next word. Post-training teaches it to answer questions. All prompts are editable — experiment yourself!',
+    start: lang === 'de' ? 'Demo starten' : 'Start Demo',
     model:
       lang === 'de'
-        ? 'Alle Demos nutzen dasselbe Basismodell: Llama 3.1 405B (kein Instruct, kein Chat — pures Basismodell)'
-        : 'All demos use the same base model: Llama 3.1 405B (no instruct, no chat — pure base model)',
+        ? 'Llama 3.1 405B — pures Basismodell, kein Instruct, kein Chat'
+        : 'Llama 3.1 405B — pure base model, no instruct, no chat',
+  }
+
+  if (!started) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center px-6">
+        <div className="absolute top-4 right-6">
+          <LangToggle lang={lang} onToggle={toggleLang} />
+        </div>
+        <div className="max-w-[600px] text-center">
+          <h1 className="mb-4 text-[2.2rem] font-normal leading-tight text-[#000]">
+            {t.title}
+          </h1>
+          <p className="mb-6 text-[16px] leading-relaxed text-[#202122]">
+            {t.subtitle}
+          </p>
+          <p className="mb-8 rounded bg-[#f8f9fa] border border-[#eaecf0] px-4 py-2 font-mono text-xs text-[#54595d]">
+            {t.model}
+          </p>
+          <button
+            onClick={() => setStarted(true)}
+            className="rounded border border-[#3366cc] bg-[#3366cc] px-8 py-3 text-lg font-bold text-white hover:bg-[#2a4b8d] transition-all"
+          >
+            {t.start}
+          </button>
+        </div>
+      </div>
+    )
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-8">
-      <header className="mb-8">
-        <div className="mb-4 flex items-center justify-between">
-          <h1 className="text-3xl font-bold tracking-tight text-zinc-100">
-            {t.title}
-          </h1>
-          <LangToggle lang={lang} onToggle={toggleLang} />
-        </div>
-        <p className="text-lg leading-relaxed text-zinc-400">{t.subtitle}</p>
-        <p className="mt-2 rounded-lg border border-zinc-800 bg-zinc-900/50 p-3 font-mono text-xs text-zinc-500">
-          {t.model}
-        </p>
-      </header>
-
-      <section className="mb-6">
-        <h2 className="mb-2 text-sm font-semibold uppercase tracking-wider text-zinc-500">
-          {t.apiKey}
-        </h2>
-        <ApiKeyInput onKeySet={() => setHasKey(true)} />
-      </section>
-
-      {hasKey && (
-        <div className="space-y-6">
-          {DEMOS.map((demo) => (
-            <DemoCard key={demo.id} demo={demo} lang={lang} />
-          ))}
-
-          <div className="rounded-xl border border-amber-500/30 bg-amber-950/10 p-6">
-            <h3 className="mb-2 text-lg font-bold text-amber-400">
-              {lang === 'de' ? 'Die Erkenntnis' : 'The Insight'}
-            </h3>
-            <p className="text-base leading-relaxed text-zinc-300">
-              {t.insight}
-            </p>
-          </div>
-        </div>
-      )}
-
-      <footer className="mt-12 border-t border-zinc-800 pt-6 text-center text-xs text-zinc-600">
-        <p>
-          {lang === 'de'
-            ? 'Erstellt mit Llama 3.1 405B BASE via Hyperbolic API'
-            : 'Built with Llama 3.1 405B BASE via Hyperbolic API'}
-        </p>
-        <p className="mt-1">
-          {lang === 'de'
-            ? 'Keine Daten werden gespeichert. API-Key bleibt in deinem Browser.'
-            : 'No data stored. API key stays in your browser.'}
-        </p>
-      </footer>
+    <div className="relative">
+      <div className="absolute top-4 right-6 z-10">
+        <LangToggle lang={lang} onToggle={toggleLang} />
+      </div>
+      <Slide
+        key={slides[slideIndex].id}
+        slide={slides[slideIndex]}
+        slideIndex={slideIndex}
+        totalSlides={slides.length}
+        onPrev={goPrev}
+        onNext={goNext}
+        lang={lang}
+      />
     </div>
   )
 }

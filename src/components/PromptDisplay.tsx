@@ -7,11 +7,11 @@ export function PromptDisplay({ text, label }: PromptDisplayProps) {
   const lines = text.split('\n')
 
   return (
-    <div className="rounded-lg border border-zinc-700/50 bg-zinc-900/80 p-4">
-      <div className="mb-2 text-xs font-medium uppercase tracking-wider text-zinc-500">
+    <div className="rounded border border-[#a2a9b1] bg-white p-3">
+      <div className="mb-1 text-xs font-bold uppercase tracking-wider text-[#72777d]">
         {label}
       </div>
-      <pre className="whitespace-pre-wrap font-mono text-sm leading-relaxed text-zinc-300">
+      <pre className="whitespace-pre-wrap font-mono text-[13px] leading-relaxed text-[#202122]">
         {lines.map((line, i) => {
           const isQuestion = line.startsWith('Q:') || line.startsWith('Frage:')
           const isAnswer = line.startsWith('A:') || line.startsWith('Antwort:')
@@ -19,13 +19,13 @@ export function PromptDisplay({ text, label }: PromptDisplayProps) {
             line.includes('Are oranges blue?') ||
             line.includes('Sind Orangen blau?')
 
-          let color = 'text-zinc-300'
-          if (isTarget && isQuestion) color = 'text-amber-400 font-semibold'
-          else if (isQuestion) color = 'text-indigo-400'
-          else if (isAnswer) color = 'text-emerald-400'
+          let style = 'text-[#202122]'
+          if (isTarget && isQuestion) style = 'text-[#b32424] font-bold'
+          else if (isQuestion) style = 'text-[#3366cc]'
+          else if (isAnswer) style = 'text-[#14866d]'
 
           return (
-            <span key={i} className={color}>
+            <span key={i} className={style}>
               {line}
               {i < lines.length - 1 ? '\n' : ''}
             </span>

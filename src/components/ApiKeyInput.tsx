@@ -17,7 +17,7 @@ export function ApiKeyInput({ onKeySet }: ApiKeyInputProps) {
   }, [key, onKeySet])
 
   return (
-    <div className="rounded-xl border border-zinc-700/50 bg-zinc-900/50 p-4">
+    <div className="rounded border border-[#a2a9b1] bg-[#f8f9fa] p-3">
       <div className="flex items-center gap-3">
         <input
           type="password"
@@ -28,22 +28,21 @@ export function ApiKeyInput({ onKeySet }: ApiKeyInputProps) {
           }}
           onKeyDown={(e) => e.key === 'Enter' && handleSave()}
           placeholder="sk_live_..."
-          className="flex-1 rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-2 font-mono text-sm text-zinc-200 placeholder-zinc-600 outline-none focus:border-indigo-500"
+          className="flex-1 rounded border border-[#a2a9b1] bg-white px-3 py-1.5 font-mono text-sm text-[#202122] placeholder-[#72777d] outline-none focus:border-[#3366cc]"
         />
         <button
           onClick={handleSave}
-          className={`rounded-lg px-4 py-2 text-sm font-semibold transition-all ${
+          className={`rounded px-4 py-1.5 text-sm font-bold transition-all ${
             saved
-              ? 'bg-emerald-600/20 text-emerald-400'
-              : 'bg-indigo-600 text-white hover:bg-indigo-500'
+              ? 'border border-[#14866d] bg-[#d5fdf4] text-[#14866d]'
+              : 'border border-[#3366cc] bg-[#3366cc] text-white hover:bg-[#2a4b8d]'
           }`}
         >
           {saved ? 'Saved' : 'Save'}
         </button>
       </div>
-      <p className="mt-2 text-xs text-zinc-600">
-        Hyperbolic API key - stored in localStorage only, never sent to any
-        server except api.hyperbolic.xyz
+      <p className="mt-2 text-xs text-[#72777d]">
+        Hyperbolic API key — stored in localStorage only, never sent anywhere except api.hyperbolic.xyz
       </p>
     </div>
   )

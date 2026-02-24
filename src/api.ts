@@ -1,13 +1,8 @@
-const API_URL = 'https://api.hyperbolic.xyz/v1/completions'
+const WORKER_URL = import.meta.env.DEV
+  ? 'http://localhost:8787'
+  : '' // same origin in production
+
 const MODEL = 'meta-llama/Meta-Llama-3.1-405B'
-
-export function getApiKey(): string | null {
-  return localStorage.getItem('hyperbolic_api_key')
-}
-
-export function setApiKey(key: string): void {
-  localStorage.setItem('hyperbolic_api_key', key)
-}
 
 interface StreamCallbacks {
   onToken: (token: string) => void
@@ -20,18 +15,9 @@ export async function streamCompletion(
   callbacks: StreamCallbacks,
   signal?: AbortSignal,
 ): Promise<void> {
-  const apiKey = getApiKey()
-  if (!apiKey) {
-    callbacks.onError('No API key set')
-    return
-  }
-
-  const response = await fetch(API_URL, {
+  const response = await fetch(`${WORKER_URL}/api/completions`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${apiKey}`,
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       model: MODEL,
       prompt,
