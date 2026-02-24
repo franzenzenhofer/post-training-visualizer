@@ -24,6 +24,7 @@ export function Slide({
   const [tokens, setTokens] = useState<string[]>([])
   const [isStreaming, setIsStreaming] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [visibleTokenCount, setVisibleTokenCount] = useState(0)
   const abortRef = useRef<AbortController | null>(null)
 
   useEffect(() => {
@@ -71,26 +72,14 @@ export function Slide({
   const isFirst = slideIndex === 0
   const isLast = slideIndex === totalSlides - 1
   const borderColor = slide.expectsBabble ? '#d33' : '#14866d'
-  const badgeBg = slide.expectsBabble ? '#fee7e6' : '#d5fdf4'
-  const badgeColor = slide.expectsBabble ? '#d33' : '#14866d'
-
-  const badgeText = slide.expectsBabble
-    ? lang === 'de' ? 'Plappert' : 'Babbles'
-    : lang === 'de' ? 'Antwortet korrekt' : 'Answers correctly'
 
   return (
     <div className="flex min-h-screen flex-col">
       <div className="flex-1 mx-auto w-full max-w-[800px] px-6 py-8">
         {/* Header */}
-        <div className="mb-6 flex items-center justify-between">
+        <div className="mb-6">
           <span className="text-sm text-[#72777d]">
             {slideIndex + 1} / {totalSlides}
-          </span>
-          <span
-            className="rounded px-2 py-0.5 text-xs font-bold"
-            style={{ background: badgeBg, color: badgeColor }}
-          >
-            {badgeText}
           </span>
         </div>
 
@@ -123,7 +112,7 @@ export function Slide({
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             rows={Math.min(prompt.split('\n').length + 1, 12)}
-            className="w-full rounded border border-[#a2a9b1] bg-white px-3 py-2 font-mono text-[13px] leading-relaxed text-[#202122] outline-none focus:border-[#3366cc] resize-y"
+            className="w-full rounded border border-[#a2a9b1] bg-white px-3 py-2 font-mono text-[13px] leading-relaxed text-[#202122] outline-none focus:border-[#3366cc] resize-y overflow-y-scroll"
           />
         </div>
 
@@ -153,9 +142,13 @@ export function Slide({
             style={{ borderLeftColor: borderColor }}
           >
             <div className="mb-2 text-xs font-bold uppercase tracking-wider text-[#72777d]">
-              {lang === 'de' ? 'Modell-Ausgabe' : 'Model output'} ({tokens.length} tokens)
+              {lang === 'de' ? 'Modell-Ausgabe' : 'Model output'} ({visibleTokenCount} tokens)
             </div>
-            <TokenStream tokens={tokens} isStreaming={isStreaming} />
+            <TokenStream
+              tokens={tokens}
+              isStreaming={isStreaming}
+              onVisibleCountChange={setVisibleTokenCount}
+            />
           </div>
         )}
 

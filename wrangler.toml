@@ -1,0 +1,10 @@
+name = "post-training-visualizer"
+main = "worker/src/index.ts"
+compatibility_date = "2024-12-01"
+
+[assets]
+directory = "./dist"
+
+[[routes]]
+pattern = "posttraining.franzai.com"
+custom_domain = true

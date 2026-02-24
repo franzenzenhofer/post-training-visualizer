@@ -26,11 +26,9 @@ body {
 @keyframes token-appear {
   from {
     opacity: 0;
-    transform: translateY(2px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 
@@ -45,4 +43,33 @@ body {
 
 .cursor-blink {
   animation: cursor-blink 0.8s infinite;
+}
+
+/* Always show scrollbars (macOS hides them by default) */
+textarea,
+.token-output {
+  overflow-y: scroll !important;
+}
+
+textarea::-webkit-scrollbar,
+.token-output::-webkit-scrollbar {
+  width: 8px;
+  -webkit-appearance: none;
+}
+
+textarea::-webkit-scrollbar-track,
+.token-output::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 4px;
+}
+
+textarea::-webkit-scrollbar-thumb,
+.token-output::-webkit-scrollbar-thumb {
+  background: #c8ccd1;
+  border-radius: 4px;
+}
+
+textarea::-webkit-scrollbar-thumb:hover,
+.token-output::-webkit-scrollbar-thumb:hover {
+  background: #a2a9b1;
 }

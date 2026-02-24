@@ -3,6 +3,34 @@ import { SLIDES_EN, SLIDES_DE } from './prompts'
 import { LangToggle } from './components/LangToggle'
 import { Slide } from './components/Slide'
 
+function FullscreenButton() {
+  const [isFullscreen, setIsFullscreen] = useState(false)
+
+  useEffect(() => {
+    const onChange = () => setIsFullscreen(!!document.fullscreenElement)
+    document.addEventListener('fullscreenchange', onChange)
+    return () => document.removeEventListener('fullscreenchange', onChange)
+  }, [])
+
+  const toggle = useCallback(() => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen()
+    } else {
+      document.documentElement.requestFullscreen()
+    }
+  }, [])
+
+  return (
+    <button
+      onClick={toggle}
+      className="rounded border border-[#a2a9b1] bg-white px-2 py-1 text-xs font-bold text-[#202122] hover:bg-[#eaecf0] transition-all"
+      title={isFullscreen ? 'Exit fullscreen' : 'Presentation mode'}
+    >
+      {isFullscreen ? 'Exit FS' : 'Fullscreen'}
+    </button>
+  )
+}
+
 function App() {
   const [lang, setLang] = useState<'en' | 'de'>('en')
   const [slideIndex, setSlideIndex] = useState(0)
@@ -51,7 +79,8 @@ function App() {
   if (!started) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center px-6">
-        <div className="absolute top-4 right-6">
+        <div className="absolute top-4 right-6 flex items-center gap-2">
+          <FullscreenButton />
           <LangToggle lang={lang} onToggle={toggleLang} />
         </div>
         <div className="max-w-[600px] text-center">
@@ -77,7 +106,8 @@ function App() {
 
   return (
     <div className="relative">
-      <div className="absolute top-4 right-6 z-10">
+      <div className="absolute top-4 right-6 z-10 flex items-center gap-2">
+        <FullscreenButton />
         <LangToggle lang={lang} onToggle={toggleLang} />
       </div>
       <Slide
