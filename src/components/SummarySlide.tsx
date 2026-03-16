@@ -42,7 +42,7 @@ const CONTENT = {
         borderColor: '#d33',
         bgColor: '#fff0f0',
         title: "The real moat is human preference data",
-        body: "Base models are converging — GPT-5, Llama 4 Maverick, Gemini 3.1 Pro, Claude Opus 4.6 all have access to similar internet data. What isn't shared is each company's RLHF dataset: millions of human ratings about which AI responses are better. That proprietary preference data — not the model weights — is increasingly the competitive differentiator. It's why Anthropic, OpenAI, and Google employ thousands of human raters.",
+        body: "Base models are converging — GPT-5, Llama 4 Maverick, Gemini 3.1 Pro, Claude Opus 4.6 all have access to similar internet data. What isn't shared is each company's RLHF dataset: millions of human and AI ratings about which AI responses are better. That proprietary preference data — not the model weights — is increasingly the competitive differentiator. It's why Anthropic, OpenAI, and Google invest heavily in human and AI evaluation pipelines.",
       },
       {
         borderColor: '#f0a500',
@@ -74,7 +74,7 @@ const CONTENT = {
         borderColor: '#d33',
         bgColor: '#fff0f0',
         title: 'Der echte Moat sind menschliche Präferenzdaten',
-        body: 'Was nicht geteilt wird, sind die RLHF-Datensätze jedes Unternehmens: Millionen menschlicher Bewertungen darüber, welche KI-Antworten besser sind. Diese proprietären Präferenzdaten — nicht die Modellgewichte — sind der zunehmend entscheidende Wettbewerbsvorteil.',
+        body: 'Was nicht geteilt wird, sind die RLHF-Datensätze jedes Unternehmens: Millionen menschlicher und KI-basierter Bewertungen darüber, welche KI-Antworten besser sind. Diese proprietären Präferenzdaten — nicht die Modellgewichte — sind der zunehmend entscheidende Wettbewerbsvorteil.',
       },
       {
         borderColor: '#f0a500',
