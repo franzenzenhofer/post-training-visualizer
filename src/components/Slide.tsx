@@ -172,6 +172,13 @@ export function Slide({
               </span>
             </div>
             <TokenStream tokens={tokens} isStreaming={isStreaming} onVisibleCountChange={setVisibleTokenCount} />
+            {!slide.expectsBabble && (
+              <p className="mt-2 text-[11px] text-[#72777d]">
+                {lang === 'de'
+                  ? 'Das Modell setzt das Muster fort, weil kein Stop-Sequenz konfiguriert ist — genau wie echte Post-Training-Modelle, aber die lernen wann sie aufhören sollen.'
+                  : 'The model keeps continuing the pattern because no stop sequence is configured — real post-trained models learn when to stop.'}
+              </p>
+            )}
           </div>
         )}
 

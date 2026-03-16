@@ -62,7 +62,7 @@ export function TokenStream({
   const showCursor = isStreaming || visibleCount < tokens.length
 
   return (
-    <div className="token-output min-h-[18em] font-mono text-[15px] leading-loose">
+    <div className="token-output min-h-[18em] font-mono text-[15px] leading-loose" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap' }}>
       {tokens.slice(0, visibleCount).map((token, i) => {
         const ci = hashIndex(token, i)
         return (
@@ -72,7 +72,6 @@ export function TokenStream({
             style={{
               backgroundColor: TOKEN_BG_COLORS[ci],
               color: TOKEN_TEXT_COLORS[ci],
-              whiteSpace: 'pre',
             }}
           >
             {token}
