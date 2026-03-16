@@ -36,19 +36,19 @@ const CONTENT = {
         borderColor: '#14866d',
         bgColor: '#f0fff8',
         title: 'Pre-training costs $100M+. Post-training costs thousands.',
-        body: 'Training GPT-4o or Claude 3.7 Sonnet from scratch costs hundreds of millions of dollars and months of compute. Post-training the same model to behave differently costs a fraction — and can be done in days. This asymmetry is why every AI company obsessively fine-tunes: it is the highest-leverage operation in AI development.',
+        body: 'Training GPT-5 or Claude Opus 4.6 from scratch costs hundreds of millions of dollars and months of compute. Post-training the same model to behave differently costs a fraction — and can be done in days. This asymmetry is why every AI company obsessively fine-tunes: it is the highest-leverage operation in AI development.',
       },
       {
         borderColor: '#d33',
         bgColor: '#fff0f0',
         title: "The real moat is human preference data",
-        body: "Base models are converging — GPT-4o, Llama 4, Gemini 2.0, Claude 3.7 all have access to similar internet data. What isn't shared is each company's RLHF dataset: millions of human ratings about which AI responses are better. That proprietary preference data — not the model weights — is increasingly the competitive differentiator. It's why Anthropic, OpenAI, and Google employ thousands of human raters.",
+        body: "Base models are converging — GPT-5, Llama 4 Maverick, Gemini 3.1 Pro, Claude Opus 4.6 all have access to similar internet data. What isn't shared is each company's RLHF dataset: millions of human ratings about which AI responses are better. That proprietary preference data — not the model weights — is increasingly the competitive differentiator. It's why Anthropic, OpenAI, and Google employ thousands of human raters.",
       },
       {
         borderColor: '#f0a500',
         bgColor: '#fffbf0',
         title: "Post-training is also how AI gets its personality",
-        body: "Claude 3.7 Sonnet sounds like Claude. ChatGPT (GPT-4o) sounds like ChatGPT. Gemini 2.0 Flash sounds like Gemini. That's not the base model — it's post-training. Values, tone, refusals, verbosity, humor, caution — all post-training decisions. Every AI company is essentially programming a personality at scale through the examples and feedback they choose to train on.",
+        body: "Claude Opus 4.6 sounds like Claude. GPT-5 sounds like ChatGPT. Gemini 3.1 Pro sounds like Gemini. That's not the base model — it's post-training. Values, tone, refusals, verbosity, humor, caution — all post-training decisions. Every AI company is essentially programming a personality at scale through the examples and feedback they choose to train on.",
       },
     ],
     footer:
@@ -68,7 +68,7 @@ const CONTENT = {
         borderColor: '#14866d',
         bgColor: '#f0fff8',
         title: 'Pre-Training kostet 100M€+. Post-Training kostet Tausende.',
-        body: 'GPT-4o oder Claude 3.7 Sonnet von Grund auf zu trainieren kostet Hunderte von Millionen und dauert Monate. Dasselbe Modell durch Post-Training anders zu gestalten kostet einen Bruchteil — und kann in Tagen erledigt werden. Diese Asymmetrie ist der Grund, warum jedes KI-Unternehmen so obsessiv fine-tuned.',
+        body: 'GPT-5 oder Claude Opus 4.6 von Grund auf zu trainieren kostet Hunderte von Millionen und dauert Monate. Dasselbe Modell durch Post-Training anders zu gestalten kostet einen Bruchteil — und kann in Tagen erledigt werden. Diese Asymmetrie ist der Grund, warum jedes KI-Unternehmen so obsessiv fine-tuned.',
       },
       {
         borderColor: '#d33',
