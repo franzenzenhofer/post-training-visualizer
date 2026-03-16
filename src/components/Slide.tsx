@@ -72,7 +72,7 @@ export function Slide({
     ? (lang === 'de' ? '⚠ Chaos erwartet' : '⚠ chaos expected')
     : (lang === 'de' ? '✓ Kohärente Antwort erwartet' : '✓ coherent answer expected')
   const borderLabelColor = slide.expectsBabble ? '#d33' : '#14866d'
-  const showInsight = !isStreaming && tokens.length > 0 && visibleTokenCount >= tokens.length && !!slide.insight
+  const showInsight = tokens.length > 0 && !!slide.insight
 
   const navBar = (
     <nav className="border-t border-[#a2a9b1] bg-[#f8f9fa] px-6 py-4">

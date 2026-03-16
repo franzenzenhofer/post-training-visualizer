@@ -17,7 +17,7 @@ export const SLIDES_EN: SlideConfig[] = [
     defaultPrompt: 'Are oranges blue?',
     expectsBabble: true,
     insight:
-      "💡 This is not a bug — it's doing exactly what it was trained to do. The model isn't \"thinking.\" It's predicting the statistically likely next token based on patterns in its training data. A base model is a prediction engine, not an assistant. Without post-training, no AI product can exist.",
+      "This is not a bug — it's doing exactly what it was trained to do. The model isn't \"thinking.\" It's predicting the statistically likely next token based on patterns in its training data. A base model is a prediction engine, not an assistant. Without post-training, no AI product can exist.",
   },
   {
     id: 'fewshot-en',
@@ -37,7 +37,7 @@ Q: Are oranges blue?
 A:`,
     expectsBabble: false,
     insight:
-      "💡 You just did post-training manually. Anthropic, OpenAI, and Google do this with millions of examples and human raters who score which answers are best. That scoring process — called RLHF (Reinforcement Learning from Human Feedback) — is the secret sauce. It's also their biggest moat: base models are increasingly similar, but the human preference data is proprietary.",
+      "You just did post-training manually. Anthropic, OpenAI, and Google do this with millions of examples and human raters who score which answers are best. That scoring process — called RLHF (Reinforcement Learning from Human Feedback) — is the secret sauce. It's also their biggest moat: base models are increasingly similar, but the human preference data is proprietary.",
   },
   {
     id: 'freeform-en',
@@ -51,7 +51,7 @@ Then they asked if the sun is dark. No way, the sun is incredibly bright.
 Next question: Are oranges blue? Well,`,
     expectsBabble: false,
     insight:
-      '💡 One base model, infinite products. Meta releases Llama 3.1 405B — then hundreds of companies fine-tune it for medicine, law, coding, customer support. The pre-training (the expensive part: $100M+) is shared. The post-training (the cheap, fast, proprietary part) is what creates differentiated products. This is why open-source base models are so strategically important.',
+      'One base model, infinite products. Meta releases Llama 3.1 405B — then hundreds of companies fine-tune it for medicine, law, coding, customer support. The pre-training (the expensive part: $100M+) is shared. The post-training (the cheap, fast, proprietary part) is what creates differentiated products. This is why open-source base models are so strategically important.',
   },
   {
     id: 'summary-en',
@@ -73,7 +73,7 @@ export const SLIDES_DE: SlideConfig[] = [
     defaultPrompt: 'Sind Orangen blau?',
     expectsBabble: true,
     insight:
-      '💡 Das ist kein Fehler — es tut genau das, wofür es trainiert wurde. Das Modell "denkt" nicht. Es sagt das statistisch wahrscheinlichste nächste Token voraus. Ein Basismodell ist eine Vorhersagemaschine, kein Assistent. Ohne Post-Training kann kein KI-Produkt existieren.',
+      'Das ist kein Fehler — es tut genau das, wofür es trainiert wurde. Das Modell "denkt" nicht. Es sagt das statistisch wahrscheinlichste nächste Token voraus. Ein Basismodell ist eine Vorhersagemaschine, kein Assistent. Ohne Post-Training kann kein KI-Produkt existieren.',
   },
   {
     id: 'fewshot-de',
@@ -93,7 +93,7 @@ Frage: Sind Orangen blau?
 Antwort:`,
     expectsBabble: false,
     insight:
-      '💡 Du hast gerade manuell Post-Training durchgeführt. Anthropic, OpenAI und Google machen das mit Millionen von Beispielen und menschlichen Bewertern, die entscheiden, welche Antworten besser sind. Dieser Bewertungsprozess — RLHF genannt — ist der entscheidende Wettbewerbsvorteil. Die proprietären Präferenzdaten sind der echte Moat der KI-Unternehmen.',
+      'Du hast gerade manuell Post-Training durchgeführt. Anthropic, OpenAI und Google machen das mit Millionen von Beispielen und menschlichen Bewertern, die entscheiden, welche Antworten besser sind. Dieser Bewertungsprozess — RLHF genannt — ist der entscheidende Wettbewerbsvorteil. Die proprietären Präferenzdaten sind der echte Moat der KI-Unternehmen.',
   },
   {
     id: 'freeform-de',
@@ -107,7 +107,7 @@ Dann fragten sie, ob die Sonne dunkel ist. Auf keinen Fall, die Sonne ist unglau
 Nächste Frage: Sind Orangen blau? Nun,`,
     expectsBabble: false,
     insight:
-      '💡 Ein Basismodell, unendliche Produkte. Meta veröffentlicht Llama 3.1 405B — dann passen hunderte von Unternehmen es für Medizin, Recht, Coding, Kundensupport an. Das Pre-Training (der teure Teil: 100M€+) wird geteilt. Das Post-Training (der günstige, schnelle, proprietäre Teil) schafft differenzierte Produkte.',
+      'Ein Basismodell, unendliche Produkte. Meta veröffentlicht Llama 3.1 405B — dann passen hunderte von Unternehmen es für Medizin, Recht, Coding, Kundensupport an. Das Pre-Training (der teure Teil: 100M€+) wird geteilt. Das Post-Training (der günstige, schnelle, proprietäre Teil) schafft differenzierte Produkte.',
   },
   {
     id: 'summary-de',
