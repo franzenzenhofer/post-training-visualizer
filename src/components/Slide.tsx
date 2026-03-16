@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import type { SlideConfig } from '../prompts'
 import { streamCompletion } from '../api'
 import { TokenStream } from './TokenStream'
+import { SummarySlide } from './SummarySlide'
 
 interface SlideProps {
   slide: SlideConfig
@@ -40,19 +41,14 @@ export function Slide({
     setTokens([])
     setError(null)
     setIsStreaming(true)
-
     const controller = new AbortController()
     abortRef.current = controller
-
     streamCompletion(
       prompt,
       {
         onToken: (token) => setTokens((prev) => [...prev, token]),
         onDone: () => setIsStreaming(false),
-        onError: (err) => {
-          setError(err)
-          setIsStreaming(false)
-        },
+        onError: (err) => { setError(err); setIsStreaming(false) },
       },
       controller.signal,
     ).catch(() => setIsStreaming(false))
@@ -72,39 +68,75 @@ export function Slide({
   const isFirst = slideIndex === 0
   const isLast = slideIndex === totalSlides - 1
   const borderColor = slide.expectsBabble ? '#d33' : '#14866d'
+  const borderLabel = slide.expectsBabble
+    ? (lang === 'de' ? '⚠ Chaos erwartet' : '⚠ chaos expected')
+    : (lang === 'de' ? '✓ Kohärente Antwort erwartet' : '✓ coherent answer expected')
+  const borderLabelColor = slide.expectsBabble ? '#d33' : '#14866d'
+  const showInsight = !isStreaming && tokens.length > 0 && visibleTokenCount >= tokens.length && !!slide.insight
+
+  const navBar = (
+    <nav className="border-t border-[#a2a9b1] bg-[#f8f9fa] px-6 py-4">
+      <div className="mx-auto flex max-w-[800px] items-center justify-between">
+        <button
+          onClick={onPrev}
+          disabled={isFirst}
+          className={`rounded px-4 py-2 text-sm font-bold ${isFirst ? 'text-[#c8ccd1] cursor-not-allowed' : 'text-[#3366cc] hover:bg-[#eaecf0] border border-[#a2a9b1]'}`}
+        >
+          {lang === 'de' ? 'Zurück' : 'Previous'}
+        </button>
+        <span className="text-sm text-[#72777d]">
+          {lang === 'de' ? `Schritt ${slideIndex + 1} von ${totalSlides}` : `Step ${slideIndex + 1} of ${totalSlides}`}
+        </span>
+        <button
+          onClick={onNext}
+          disabled={isLast}
+          className={`rounded px-4 py-2 text-sm font-bold ${isLast ? 'text-[#c8ccd1] cursor-not-allowed' : 'border border-[#3366cc] bg-[#3366cc] text-white hover:bg-[#2a4b8d]'}`}
+        >
+          {lang === 'de' ? 'Weiter' : 'Next'}
+        </button>
+      </div>
+    </nav>
+  )
+
+  if (slide.static) {
+    return (
+      <div className="flex min-h-screen flex-col">
+        <div className="flex-1 mx-auto w-full max-w-[800px] px-6 py-8">
+          <div className="mb-6">
+            <span className="text-sm text-[#72777d]">{slideIndex + 1} / {totalSlides}</span>
+          </div>
+          <h2 className="mb-6 text-2xl font-normal text-[#000] border-b border-[#a2a9b1] pb-2">
+            {slide.title}
+          </h2>
+          <SummarySlide lang={lang} />
+        </div>
+        {navBar}
+      </div>
+    )
+  }
 
   return (
     <div className="flex min-h-screen flex-col">
       <div className="flex-1 mx-auto w-full max-w-[800px] px-6 py-8">
-        {/* Header */}
         <div className="mb-6">
-          <span className="text-sm text-[#72777d]">
-            {slideIndex + 1} / {totalSlides}
-          </span>
+          <span className="text-sm text-[#72777d]">{slideIndex + 1} / {totalSlides}</span>
         </div>
 
-        {/* Title + Description */}
-        <h2
-          className="mb-2 text-2xl font-normal text-[#000] border-b border-[#a2a9b1] pb-2"
-        >
+        <h2 className="mb-2 text-2xl font-normal text-[#000] border-b border-[#a2a9b1] pb-2">
           {slide.title}
         </h2>
         <p className="mb-6 text-[15px] leading-relaxed text-[#202122]">
           {slide.description}
         </p>
 
-        {/* Editable Prompt */}
         <div className="mb-4">
           <div className="mb-1 flex items-center justify-between">
             <label className="text-xs font-bold uppercase tracking-wider text-[#72777d]">
-              {lang === 'de' ? 'Prompt (editierbar)' : 'Prompt (editable)'}
+              {lang === 'de' ? 'Prompt — was das Modell sieht (editierbar)' : 'Prompt sent to model (editable — try changing it!)'}
             </label>
             {prompt !== slide.defaultPrompt && (
-              <button
-                onClick={handleReset}
-                className="text-xs text-[#3366cc] hover:underline"
-              >
-                {lang === 'de' ? 'Zuruecksetzen' : 'Reset to default'}
+              <button onClick={handleReset} className="text-xs text-[#3366cc] hover:underline">
+                {lang === 'de' ? 'Zurücksetzen' : 'Reset to default'}
               </button>
             )}
           </div>
@@ -116,39 +148,36 @@ export function Slide({
           />
         </div>
 
-        {/* Generate Button */}
         <div className="mb-4 flex items-center gap-3">
           <button
             onClick={isStreaming ? handleStop : handleGenerate}
-            className={`rounded px-5 py-2.5 text-sm font-bold transition-all ${
-              isStreaming
-                ? 'border border-[#a2a9b1] bg-[#f8f9fa] text-[#202122] hover:bg-[#eaecf0]'
-                : 'border border-[#3366cc] bg-[#3366cc] text-white hover:bg-[#2a4b8d]'
-            }`}
+            className={`rounded px-5 py-2.5 text-sm font-bold transition-all ${isStreaming ? 'border border-[#a2a9b1] bg-[#f8f9fa] text-[#202122] hover:bg-[#eaecf0]' : 'border border-[#3366cc] bg-[#3366cc] text-white hover:bg-[#2a4b8d]'}`}
           >
-            {isStreaming
-              ? lang === 'de' ? 'Stopp' : 'Stop'
-              : lang === 'de' ? 'Generieren' : 'Generate'}
+            {isStreaming ? (lang === 'de' ? 'Stopp' : 'Stop') : (lang === 'de' ? 'Generieren' : 'Generate')}
           </button>
-          <span className="font-mono text-xs text-[#72777d]">
-            Llama 3.1 405B BASE
-          </span>
+          <span className="font-mono text-xs text-[#72777d]">Llama 3.1 405B BASE</span>
         </div>
 
-        {/* Output */}
         {(tokens.length > 0 || isStreaming) && (
           <div
             className="mb-4 rounded border-l-4 bg-[#f8f9fa] border border-[#a2a9b1] p-4"
             style={{ borderLeftColor: borderColor }}
           >
-            <div className="mb-2 text-xs font-bold uppercase tracking-wider text-[#72777d]">
-              {lang === 'de' ? 'Modell-Ausgabe' : 'Model output'} ({visibleTokenCount} tokens)
+            <div className="mb-2 flex items-center justify-between">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#72777d]">
+                {lang === 'de' ? 'Modell-Ausgabe' : 'Model output'} ({visibleTokenCount} tokens)
+              </span>
+              <span className="text-xs font-bold" style={{ color: borderLabelColor }}>
+                {borderLabel}
+              </span>
             </div>
-            <TokenStream
-              tokens={tokens}
-              isStreaming={isStreaming}
-              onVisibleCountChange={setVisibleTokenCount}
-            />
+            <TokenStream tokens={tokens} isStreaming={isStreaming} onVisibleCountChange={setVisibleTokenCount} />
+          </div>
+        )}
+
+        {showInsight && (
+          <div className="mb-4 rounded border border-[#a2a9b1] bg-[#f8f9fa] px-4 py-3 text-[14px] leading-relaxed text-[#202122]">
+            {slide.insight}
           </div>
         )}
 
@@ -158,37 +187,7 @@ export function Slide({
           </div>
         )}
       </div>
-
-      {/* Navigation */}
-      <nav className="border-t border-[#a2a9b1] bg-[#f8f9fa] px-6 py-4">
-        <div className="mx-auto flex max-w-[800px] items-center justify-between">
-          <button
-            onClick={onPrev}
-            disabled={isFirst}
-            className={`rounded px-4 py-2 text-sm font-bold ${
-              isFirst
-                ? 'text-[#c8ccd1] cursor-not-allowed'
-                : 'text-[#3366cc] hover:bg-[#eaecf0] border border-[#a2a9b1]'
-            }`}
-          >
-            {lang === 'de' ? 'Zurueck' : 'Previous'}
-          </button>
-          <span className="text-sm text-[#72777d]">
-            {lang === 'de' ? `Schritt ${slideIndex + 1} von ${totalSlides}` : `Step ${slideIndex + 1} of ${totalSlides}`}
-          </span>
-          <button
-            onClick={onNext}
-            disabled={isLast}
-            className={`rounded px-4 py-2 text-sm font-bold ${
-              isLast
-                ? 'text-[#c8ccd1] cursor-not-allowed'
-                : 'border border-[#3366cc] bg-[#3366cc] text-white hover:bg-[#2a4b8d]'
-            }`}
-          >
-            {lang === 'de' ? 'Weiter' : 'Next'}
-          </button>
-        </div>
-      </nav>
+      {navBar}
     </div>
   )
 }

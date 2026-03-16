@@ -67,8 +67,8 @@ function App() {
         : 'How Post-Training Works',
     subtitle:
       lang === 'de'
-        ? 'Ein Basismodell sagt nur das naechste Wort voraus. Post-Training bringt ihm bei, Fragen zu beantworten. Alle Prompts sind editierbar — experimentiere selbst!'
-        : 'A base model just predicts the next word. Post-training teaches it to answer questions. All prompts are editable — experiment yourself!',
+        ? 'ChatGPT, Claude, Gemini — alle beginnen als dasselbe chaotische Wortvorhersage-System. Post-Training ist das, was aus diesem Chaos einen hilfreichen Assistenten macht. Diese Demo zeigt dir genau wie — mit einem echten 405-Milliarden-Parameter-Modell. Alle Prompts sind editierbar.'
+        : 'ChatGPT, Claude, Gemini — they all start as the same chaotic word predictor. Post-training is what turns that chaos into a helpful assistant. This demo shows you exactly how, with a real 405-billion parameter model. All prompts are editable.',
     start: lang === 'de' ? 'Demo starten' : 'Start Demo',
     model:
       lang === 'de'
