@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { SLIDES_EN, SLIDES_DE } from './prompts'
 import { LangToggle } from './components/LangToggle'
 import { Slide } from './components/Slide'
+import { MODEL_ENDPOINT_NOTE, MODEL_NAME } from './model'
 
 function FullscreenButton() {
   const [isFullscreen, setIsFullscreen] = useState(false)
@@ -23,10 +24,10 @@ function FullscreenButton() {
   return (
     <button
       onClick={toggle}
-      className="rounded border border-[#a2a9b1] bg-white px-2 py-1 text-xs font-bold text-[#202122] hover:bg-[#eaecf0] transition-all"
+      className="rounded border border-[#a2a9b1] bg-white px-2 py-1 text-base font-bold text-[#202122] hover:bg-[#eaecf0] transition-all"
       title={isFullscreen ? 'Exit fullscreen' : 'Presentation mode'}
     >
-      {isFullscreen ? 'Exit FS' : 'Fullscreen'}
+      {isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
     </button>
   )
 }
@@ -67,13 +68,10 @@ function App() {
         : 'How Post-Training Works',
     subtitle:
       lang === 'de'
-        ? 'ChatGPT, Claude, Gemini — alle beginnen als dasselbe chaotische Wortvorhersage-System. Post-Training ist das, was aus diesem Chaos einen hilfreichen Assistenten macht. Diese Demo zeigt dir genau wie — mit einem echten Llama-Modell, das als rohe Completion ohne Chat-Template bedient wird. Alle Prompts sind editierbar.'
-        : 'ChatGPT, Claude, Gemini — they all start as the same chaotic word predictor. Post-training is what turns that chaos into a helpful assistant. This demo shows you exactly how, using a real Llama model served as raw completions with no chat template. All prompts are editable.',
+        ? 'ChatGPT, Claude, Gemini - alle beginnen als chaotisches Wortvorhersage-System. Post-Training ist das, was aus diesem Chaos einen hilfreichen Assistenten macht. Diese Demo zeigt dir genau wie, mit einem echten Sprachmodell. Alle Prompts sind editierbar.'
+        : 'ChatGPT, Claude, Gemini - they all start as a chaotic word predictor. Post-training is what turns that chaos into a helpful assistant. This demo shows you exactly how, with a real language model. All prompts are editable.',
     start: lang === 'de' ? 'Demo starten' : 'Start Demo',
-    model:
-      lang === 'de'
-        ? 'meta-llama/Llama-3.3-70B-Instruct, aufgerufen über /v1/completions (ohne Chat-Template) — ein Basismodell'
-        : 'meta-llama/Llama-3.3-70B-Instruct, called via /v1/completions (no chat template) — a base model',
+    model: `${MODEL_NAME} - ${MODEL_ENDPOINT_NOTE[lang]}`,
   }
 
   if (!started) {
@@ -90,7 +88,7 @@ function App() {
           <p className="mb-6 text-[16px] leading-relaxed text-[#202122]">
             {t.subtitle}
           </p>
-          <p className="mb-8 rounded bg-[#f8f9fa] border border-[#eaecf0] px-4 py-2 font-mono text-xs text-[#54595d]">
+          <p className="mb-8 rounded bg-[#f8f9fa] border border-[#eaecf0] px-4 py-2 font-mono text-base text-[#54595d]">
             {t.model}
           </p>
           <button

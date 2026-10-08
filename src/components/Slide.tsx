@@ -3,6 +3,7 @@ import type { SlideConfig } from '../prompts'
 import { streamCompletion } from '../api'
 import { TokenStream } from './TokenStream'
 import { SummarySlide } from './SummarySlide'
+import { MODEL_ENDPOINT_NOTE, MODEL_NAME } from '../model'
 
 interface SlideProps {
   slide: SlideConfig
@@ -77,17 +78,17 @@ export function Slide({
         <button
           onClick={onPrev}
           disabled={isFirst}
-          className={`rounded px-4 py-2 text-sm font-bold ${isFirst ? 'text-[#c8ccd1] cursor-not-allowed' : 'text-[#3366cc] hover:bg-[#eaecf0] border border-[#a2a9b1]'}`}
+          className={`rounded px-4 py-2 text-base font-bold ${isFirst ? 'text-[#c8ccd1] cursor-not-allowed' : 'text-[#3366cc] hover:bg-[#eaecf0] border border-[#a2a9b1]'}`}
         >
           {lang === 'de' ? 'Zurück' : 'Previous'}
         </button>
-        <span className="text-sm text-[#72777d]">
+        <span className="text-base text-[#72777d]">
           {lang === 'de' ? `Schritt ${slideIndex + 1} von ${totalSlides}` : `Step ${slideIndex + 1} of ${totalSlides}`}
         </span>
         <button
           onClick={onNext}
           disabled={isLast}
-          className={`rounded px-4 py-2 text-sm font-bold ${isLast ? 'text-[#c8ccd1] cursor-not-allowed' : 'border border-[#3366cc] bg-[#3366cc] text-white hover:bg-[#2a4b8d]'}`}
+          className={`rounded px-4 py-2 text-base font-bold ${isLast ? 'text-[#c8ccd1] cursor-not-allowed' : 'border border-[#3366cc] bg-[#3366cc] text-white hover:bg-[#2a4b8d]'}`}
         >
           {lang === 'de' ? 'Weiter' : 'Next'}
         </button>
@@ -100,7 +101,7 @@ export function Slide({
       <div className="flex min-h-screen flex-col">
         <div className="flex-1 mx-auto w-full max-w-[800px] px-6 py-8">
           <div className="mb-6">
-            <span className="text-sm text-[#72777d]">{slideIndex + 1} / {totalSlides}</span>
+            <span className="text-base text-[#72777d]">{slideIndex + 1} / {totalSlides}</span>
           </div>
           <h2 className="mb-6 text-2xl font-normal text-[#000] border-b border-[#a2a9b1] pb-2">
             {slide.title}
@@ -116,23 +117,23 @@ export function Slide({
     <div className="flex min-h-screen flex-col">
       <div className="flex-1 mx-auto w-full max-w-[800px] px-6 py-8">
         <div className="mb-6">
-          <span className="text-sm text-[#72777d]">{slideIndex + 1} / {totalSlides}</span>
+          <span className="text-base text-[#72777d]">{slideIndex + 1} / {totalSlides}</span>
         </div>
 
         <h2 className="mb-2 text-2xl font-normal text-[#000] border-b border-[#a2a9b1] pb-2">
           {slide.title}
         </h2>
-        <p className="mb-6 text-[15px] leading-relaxed text-[#202122]">
+        <p className="mb-6 text-base leading-relaxed text-[#202122]">
           {slide.description}
         </p>
 
         <div className="mb-4">
           <div className="mb-1 flex items-center justify-between">
-            <label className="text-xs font-bold uppercase tracking-wider text-[#72777d]">
-              {lang === 'de' ? 'Prompt — was das Modell sieht (editierbar)' : 'Prompt sent to model (editable — try changing it!)'}
+            <label className="text-base font-bold uppercase tracking-wider text-[#72777d]">
+              {lang === 'de' ? 'Prompt an das Modell (editierbar - probier es aus!)' : 'Prompt sent to model (editable - try changing it!)'}
             </label>
             {prompt !== slide.defaultPrompt && (
-              <button onClick={handleReset} className="text-xs text-[#3366cc] hover:underline">
+              <button onClick={handleReset} className="text-base text-[#3366cc] hover:underline">
                 {lang === 'de' ? 'Zurücksetzen' : 'Reset to default'}
               </button>
             )}
@@ -141,22 +142,20 @@ export function Slide({
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             rows={Math.min(prompt.split('\n').length + 1, 12)}
-            className="w-full rounded border border-[#a2a9b1] bg-white px-3 py-2 font-mono text-[13px] leading-relaxed text-[#202122] outline-none focus:border-[#3366cc] resize-y overflow-y-scroll"
+            className="w-full rounded border border-[#a2a9b1] bg-white px-3 py-2 font-mono text-base leading-relaxed text-[#202122] outline-none focus:border-[#3366cc] resize-y overflow-y-scroll"
           />
         </div>
 
         <div className="mb-4 flex items-center gap-3">
           <button
             onClick={isStreaming ? handleStop : handleGenerate}
-            className={`rounded px-5 py-2.5 text-sm font-bold transition-all ${isStreaming ? 'border border-[#a2a9b1] bg-[#f8f9fa] text-[#202122] hover:bg-[#eaecf0]' : 'border border-[#3366cc] bg-[#3366cc] text-white hover:bg-[#2a4b8d]'}`}
+            className={`rounded px-5 py-2.5 text-base font-bold transition-all ${isStreaming ? 'border border-[#a2a9b1] bg-[#f8f9fa] text-[#202122] hover:bg-[#eaecf0]' : 'border border-[#3366cc] bg-[#3366cc] text-white hover:bg-[#2a4b8d]'}`}
           >
             {isStreaming ? (lang === 'de' ? 'Stopp' : 'Stop') : (lang === 'de' ? 'Generieren' : 'Generate')}
           </button>
-          <span className="font-mono text-xs text-[#72777d]">
-            meta-llama/Llama-3.3-70B-Instruct{' '}
-            <span className="text-[#a2a9b1]">
-              via /v1/completions (no chat template)
-            </span>
+          <span className="font-mono text-base text-[#72777d]">
+            {MODEL_NAME}{' '}
+            <span className="text-[#72777d]">({MODEL_ENDPOINT_NOTE[lang]})</span>
           </span>
         </div>
 
@@ -166,32 +165,32 @@ export function Slide({
             style={{ borderLeftColor: borderColor }}
           >
             <div className="mb-2 flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#72777d]">
+              <span className="text-base font-bold uppercase tracking-wider text-[#72777d]">
                 {lang === 'de' ? 'Modell-Ausgabe' : 'Model output'} ({visibleTokenCount} tokens)
               </span>
-              <span className="text-xs font-bold" style={{ color: borderLabelColor }}>
+              <span className="text-base font-bold" style={{ color: borderLabelColor }}>
                 {borderLabel}
               </span>
             </div>
             <TokenStream key={generation} tokens={tokens} isStreaming={isStreaming} onVisibleCountChange={setVisibleTokenCount} />
             {!slide.expectsBabble && (
-              <p className="mt-2 text-[11px] text-[#72777d]">
+              <p className="mt-2 text-base text-[#72777d]">
                 {lang === 'de'
-                  ? 'Das Modell setzt das Muster fort, weil kein Stop-Sequenz konfiguriert ist — genau wie echte Post-Training-Modelle, aber die lernen wann sie aufhören sollen.'
-                  : 'The model keeps continuing the pattern because no stop sequence is configured — real post-trained models learn when to stop.'}
+                  ? 'Das Modell setzt das Muster immer weiter fort, weil keine Stop-Sequenz gesetzt ist. Post-trainierte Modelle haben gelernt, wann sie aufhören sollen.'
+                  : 'The model keeps continuing the pattern because no stop sequence is set. Post-trained models have learned when to stop.'}
               </p>
             )}
           </div>
         )}
 
         {showInsight && (
-          <div className="mb-4 rounded border border-[#a2a9b1] bg-[#f8f9fa] px-4 py-3 text-[14px] leading-relaxed text-[#202122]">
+          <div className="mb-4 rounded border border-[#a2a9b1] bg-[#f8f9fa] px-4 py-3 text-base leading-relaxed text-[#202122]">
             {slide.insight}
           </div>
         )}
 
         {error && (
-          <div className="mb-4 rounded border border-[#d33] bg-[#fee7e6] p-3 text-sm text-[#d33]">
+          <div className="mb-4 rounded border border-[#d33] bg-[#fee7e6] p-3 text-base text-[#d33]">
             {error}
           </div>
         )}

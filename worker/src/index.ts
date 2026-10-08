@@ -89,7 +89,9 @@ async function handleCompletions(request: Request, env: Env): Promise<Response> 
       ...parsed,
       model: MODEL,
       stream: true,
-      provider: { only: RAW_COMPLETION_PROVIDERS, allow_fallbacks: false },
+      // Fallbacks stay on so a busy DeepInfra fails over to Together; `only` (and the
+      // key guardrail) keep routing inside the raw-completion providers.
+      provider: { only: RAW_COMPLETION_PROVIDERS },
     }),
   });
 
