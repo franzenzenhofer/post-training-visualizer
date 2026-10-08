@@ -24,7 +24,7 @@ function InsightCard({ borderColor, bgColor, title, body }: InsightCardProps) {
 const CONTENT = {
   en: {
     intro:
-      'You just ran three experiments on a real 405-billion parameter model. Here is what they reveal about the AI industry:',
+      'You just ran three experiments on a real Llama model served as raw completions with no chat template. Here is what they reveal about the AI industry:',
     cards: [
       {
         borderColor: '#3366cc',
@@ -52,11 +52,11 @@ const CONTENT = {
       },
     ],
     footer:
-      'This demo uses Llama 3.1 405B via Hyperbolic — a real base model, no instruction tuning, no post-training. All prompts are editable. Go back and experiment.',
+      'This demo uses meta-llama/Llama-3.3-70B-Instruct via OpenRouter (DeepInfra / Together), called through /v1/completions (no chat template) — a base model. All prompts are editable. Go back and experiment.',
   },
   de: {
     intro:
-      'Du hast gerade drei Experimente mit einem echten 405-Milliarden-Parameter-Modell durchgeführt. Hier ist, was sie über die KI-Industrie verraten:',
+      'Du hast gerade drei Experimente mit einem echten Llama-Modell durchgeführt, das als rohe Completion ohne Chat-Template bedient wurde. Hier ist, was sie über die KI-Industrie verraten:',
     cards: [
       {
         borderColor: '#3366cc',
@@ -84,7 +84,7 @@ const CONTENT = {
       },
     ],
     footer:
-      'Diese Demo verwendet Llama 3.1 405B über Hyperbolic — ein echtes Basismodell, kein Instruction-Tuning, kein Post-Training. Alle Prompts sind editierbar. Geh zurück und experimentiere.',
+      'Diese Demo verwendet meta-llama/Llama-3.3-70B-Instruct über OpenRouter (DeepInfra / Together), aufgerufen über /v1/completions (ohne Chat-Template) — ein Basismodell. Alle Prompts sind editierbar. Geh zurück und experimentiere.',
   },
 }
 

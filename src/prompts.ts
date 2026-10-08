@@ -13,7 +13,7 @@ export const SLIDES_EN: SlideConfig[] = [
     id: 'base-en',
     title: 'Step 1: The Raw Base Model',
     description:
-      'Llama 3.1 405B is a base model — 405 billion parameters, trained by Meta on trillions of words from the internet. "Base model" means it was trained on one task only: predict the next word. No instructions. No chat. No personality. Just raw pattern completion. Every AI assistant you know — ChatGPT, Claude, Gemini — starts as something like this before post-training shapes it into a product.',
+      'What you\'re about to see is a real Llama model (meta-llama/Llama-3.3-70B-Instruct) called through the raw /v1/completions endpoint with no chat template — a setup that simulates base-model behavior. A "base model" is what comes out of pre-training: trained on trillions of words from the internet on one task only — predict the next word. No instructions. No chat. No personality. Just raw pattern completion. Every AI assistant you know — ChatGPT, Claude, Gemini — starts as something like this before post-training shapes it into a product.',
     defaultPrompt: 'Are oranges blue?',
     expectsBabble: true,
     insight:
@@ -89,7 +89,7 @@ export const SLIDES_DE: SlideConfig[] = [
     id: 'base-de',
     title: 'Schritt 1: Das rohe Basismodell',
     description:
-      'Llama 3.1 405B ist ein Basismodell — 405 Milliarden Parameter, trainiert von Meta auf Billionen Wörtern aus dem Internet. "Basismodell" bedeutet: es wurde auf eine einzige Aufgabe trainiert — das nächste Wort vorherzusagen. Keine Anweisungen. Kein Chat. Keine Persönlichkeit. Nur Mustervervollständigung. Jeder KI-Assistent — ChatGPT, Claude, Gemini — beginnt als etwas Ähnliches, bevor Post-Training daraus ein Produkt macht.',
+      'Was du gleich siehst, ist ein echtes Llama-Modell (meta-llama/Llama-3.3-70B-Instruct), aufgerufen über den rohen /v1/completions-Endpoint ohne Chat-Template — ein Setup, das Basismodell-Verhalten simuliert. Ein "Basismodell" ist das, was aus dem Pre-Training kommt: trainiert auf Billionen Wörtern aus dem Internet, auf eine einzige Aufgabe — das nächste Wort vorherzusagen. Keine Anweisungen. Kein Chat. Keine Persönlichkeit. Nur Mustervervollständigung. Jeder KI-Assistent — ChatGPT, Claude, Gemini — beginnt als etwas Ähnliches, bevor Post-Training daraus ein Produkt macht.',
     defaultPrompt: 'Sind Orangen blau?',
     expectsBabble: true,
     insight:

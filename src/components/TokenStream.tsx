@@ -32,12 +32,8 @@ export function TokenStream({
   const [visibleCount, setVisibleCount] = useState(0)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
+  // Remounted per generation (keyed in Slide), so visibleCount always starts at 0 for a new stream.
   useEffect(() => {
-    if (tokens.length === 0) {
-      setVisibleCount(0)
-      onVisibleCountChange(0)
-      return
-    }
     if (visibleCount >= tokens.length && !isStreaming) return
 
     timerRef.current = setInterval(() => {
@@ -53,7 +49,7 @@ export function TokenStream({
     return () => {
       if (timerRef.current) clearInterval(timerRef.current)
     }
-  }, [tokens.length, isStreaming, visibleCount, onVisibleCountChange])
+  }, [tokens.length, isStreaming, visibleCount])
 
   useEffect(() => {
     onVisibleCountChange(visibleCount)

@@ -8,3 +8,22 @@ directory = "./dist"
 [[routes]]
 pattern = "posttraining.franzai.com"
 custom_domain = true
+
+# Abuse protection for /api/completions (money is hard-capped separately by the
+# OpenRouter key limit + guardrail). Workshop Wi-Fi puts many people behind one IP,
+# so the per-IP limit is generous; the global limit caps total throughput.
+[[ratelimits]]
+name = "PER_IP_LIMITER"
+namespace_id = "7301"
+
+  [ratelimits.simple]
+  limit = 30
+  period = 60
+
+[[ratelimits]]
+name = "GLOBAL_LIMITER"
+namespace_id = "7302"
+
+  [ratelimits.simple]
+  limit = 200
+  period = 60

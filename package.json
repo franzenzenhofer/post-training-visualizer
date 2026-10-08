@@ -5,9 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "typecheck": "tsc -b && tsc -p worker",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "npm run typecheck && npm run lint && npm run build && npx wrangler deploy"
   },
   "dependencies": {
     "react": "^19.2.0",

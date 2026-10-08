@@ -26,18 +26,15 @@ export function Slide({
   const [isStreaming, setIsStreaming] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [visibleTokenCount, setVisibleTokenCount] = useState(0)
+  const [generation, setGeneration] = useState(0)
   const abortRef = useRef<AbortController | null>(null)
 
-  useEffect(() => {
-    setPrompt(slide.defaultPrompt)
-    setTokens([])
-    setError(null)
-    setIsStreaming(false)
-    abortRef.current?.abort()
-  }, [slide.defaultPrompt])
+  // Slide is remounted per slide (keyed by id in App), so only the in-flight request needs cleanup.
+  useEffect(() => () => abortRef.current?.abort(), [])
 
   const handleGenerate = useCallback(() => {
     abortRef.current?.abort()
+    setGeneration((g) => g + 1)
     setTokens([])
     setError(null)
     setIsStreaming(true)
@@ -155,7 +152,12 @@ export function Slide({
           >
             {isStreaming ? (lang === 'de' ? 'Stopp' : 'Stop') : (lang === 'de' ? 'Generieren' : 'Generate')}
           </button>
-          <span className="font-mono text-xs text-[#72777d]">Llama 3.1 405B BASE</span>
+          <span className="font-mono text-xs text-[#72777d]">
+            meta-llama/Llama-3.3-70B-Instruct{' '}
+            <span className="text-[#a2a9b1]">
+              via /v1/completions (no chat template)
+            </span>
+          </span>
         </div>
 
         {(tokens.length > 0 || isStreaming) && (
@@ -171,7 +173,7 @@ export function Slide({
                 {borderLabel}
               </span>
             </div>
-            <TokenStream tokens={tokens} isStreaming={isStreaming} onVisibleCountChange={setVisibleTokenCount} />
+            <TokenStream key={generation} tokens={tokens} isStreaming={isStreaming} onVisibleCountChange={setVisibleTokenCount} />
             {!slide.expectsBabble && (
               <p className="mt-2 text-[11px] text-[#72777d]">
                 {lang === 'de'

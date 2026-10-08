@@ -1,5 +1,3 @@
-const MODEL = 'meta-llama/Meta-Llama-3.1-405B'
-
 interface StreamCallbacks {
   onToken: (token: string) => void
   onDone: () => void
@@ -15,11 +13,9 @@ export async function streamCompletion(
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      model: MODEL,
       prompt,
       max_tokens: 80,
       temperature: 0.7,
-      stream: true,
     }),
     signal,
   })

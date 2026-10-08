@@ -67,13 +67,13 @@ function App() {
         : 'How Post-Training Works',
     subtitle:
       lang === 'de'
-        ? 'ChatGPT, Claude, Gemini — alle beginnen als dasselbe chaotische Wortvorhersage-System. Post-Training ist das, was aus diesem Chaos einen hilfreichen Assistenten macht. Diese Demo zeigt dir genau wie — mit einem echten 405-Milliarden-Parameter-Modell. Alle Prompts sind editierbar.'
-        : 'ChatGPT, Claude, Gemini — they all start as the same chaotic word predictor. Post-training is what turns that chaos into a helpful assistant. This demo shows you exactly how, with a real 405-billion parameter model. All prompts are editable.',
+        ? 'ChatGPT, Claude, Gemini — alle beginnen als dasselbe chaotische Wortvorhersage-System. Post-Training ist das, was aus diesem Chaos einen hilfreichen Assistenten macht. Diese Demo zeigt dir genau wie — mit einem echten Llama-Modell, das als rohe Completion ohne Chat-Template bedient wird. Alle Prompts sind editierbar.'
+        : 'ChatGPT, Claude, Gemini — they all start as the same chaotic word predictor. Post-training is what turns that chaos into a helpful assistant. This demo shows you exactly how, using a real Llama model served as raw completions with no chat template. All prompts are editable.',
     start: lang === 'de' ? 'Demo starten' : 'Start Demo',
     model:
       lang === 'de'
-        ? 'Llama 3.1 405B — pures Basismodell, kein Instruct, kein Chat'
-        : 'Llama 3.1 405B — pure base model, no instruct, no chat',
+        ? 'meta-llama/Llama-3.3-70B-Instruct, aufgerufen über /v1/completions (ohne Chat-Template) — ein Basismodell'
+        : 'meta-llama/Llama-3.3-70B-Instruct, called via /v1/completions (no chat template) — a base model',
   }
 
   if (!started) {
