@@ -10,7 +10,13 @@ const MODEL = "meta-llama/llama-3.3-70b-instruct";
 // Only providers verified to pass the prompt through raw. Others (Groq,
 // Parasail, Novita) silently wrap it in the chat template, which turns the
 // "base model babble" of step 1 into a polite assistant answer.
-const RAW_COMPLETION_PROVIDERS = ["DeepInfra", "Together"];
+// Checked 2026-11-22 against the live endpoint list: Together no longer serves this
+// model; CoreWeave passes the prompt through raw; Cloudflare and Bedrock chat-wrap it.
+const RAW_COMPLETION_PROVIDERS = ["DeepInfra", "CoreWeave"];
+const FALLBACK_MODELS = ["meta-llama/llama-3.1-8b-instruct"];
+const MAX_ATTEMPTS = 3;
+const RETRY_BASE_DELAY_MS = 400;
+const FRIENDLY_ERROR = "The model is busy right now - please press Generate again in a few seconds.";
 const MAX_PROMPT_CHARS = 2000;
 const MAX_TOKENS_LIMIT = 120;
 const DEFAULT_MAX_TOKENS = 80;
@@ -60,6 +66,30 @@ async function isRateLimited(request: Request, env: Env): Promise<boolean> {
   return !perIp.success || !global.success;
 }
 
+function isRetryable(status: number): boolean {
+  return status === 429 || status >= 500;
+}
+
+async function fetchWithRetry(body: string, apiKey: string): Promise<Response> {
+  let response: Response | undefined;
+  for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+    if (attempt > 0) await new Promise((r) => setTimeout(r, RETRY_BASE_DELAY_MS * 2 ** (attempt - 1)));
+    response = await fetch(OPENROUTER_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+        "HTTP-Referer": "https://posttraining.franzai.com",
+        "X-Title": "Post-Training Visualizer",
+      },
+      body,
+    });
+    if (!isRetryable(response.status)) return response;
+    console.error(`OpenRouter attempt ${attempt + 1} failed: ${response.status}`);
+  }
+  return response as Response;
+}
+
 async function handleCompletions(request: Request, env: Env): Promise<Response> {
   if (request.method !== "POST") return errorResponse("Method not allowed", 405);
   if (!isSameOrigin(request)) return errorResponse("Forbidden origin", 403);
@@ -77,28 +107,22 @@ async function handleCompletions(request: Request, env: Env): Promise<Response> 
   const parsed = parseCompletionRequest(raw);
   if (typeof parsed === "string") return errorResponse(parsed, 400);
 
-  const upstream = await fetch(OPENROUTER_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${env.OPENROUTER_API_KEY}`,
-      "HTTP-Referer": "https://posttraining.franzai.com",
-      "X-Title": "Post-Training Visualizer",
-    },
-    body: JSON.stringify({
-      ...parsed,
-      model: MODEL,
-      stream: true,
-      // Fallbacks stay on so a busy DeepInfra fails over to Together; `only` (and the
-      // key guardrail) keep routing inside the raw-completion providers.
-      provider: { only: RAW_COMPLETION_PROVIDERS },
-    }),
+  const body = JSON.stringify({
+    ...parsed,
+    model: MODEL,
+    // OpenRouter tries these in order when the primary model fails or is rate-limited.
+    models: [MODEL, ...FALLBACK_MODELS],
+    stream: true,
+    // Fallbacks stay on so a busy DeepInfra fails over to CoreWeave; `only` (and the
+    // key guardrail) keep routing inside the raw-completion providers.
+    provider: { order: RAW_COMPLETION_PROVIDERS, only: RAW_COMPLETION_PROVIDERS, allow_fallbacks: true },
   });
+  const upstream = await fetchWithRetry(body, env.OPENROUTER_API_KEY);
 
   if (!upstream.ok) {
     const errText = await upstream.text();
     console.error(`OpenRouter ${upstream.status}: ${errText}`);
-    return errorResponse(`OpenRouter API error: ${upstream.status} ${errText}`, upstream.status);
+    return errorResponse(FRIENDLY_ERROR, 503);
   }
 
   return new Response(upstream.body, {
